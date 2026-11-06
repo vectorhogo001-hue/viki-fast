@@ -1,0 +1,106 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - cd frontend && npm ci && npm run build
+
+builds:
+  - id: netmerge-gui
+    main: ./cmd/netmerge-gui
+    binary: netmerge-gui
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+    hooks:
+      post:
+        - cmd: cp frontend/dist/* .
+          dir: .
+        - cmd: cp build/packaging/windows/icon.ico .
+          dir: .
+
+archives:
+  - id: default
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    format: tar.gz
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+    format_overrides:
+      - goos: windows
+        format: zip
+
+  - id: windows-installer
+    name_template: '{{ .ProjectName }}_setup_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format: zip
+    files:
+      - none
+    format_overrides:
+      - goos: windows
+        format: exe
+    wraps:
+      - default
+    hooks:
+      post:
+        - cmd: |
+            iscc build/windows/installer.iss
+          dir: .
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  name_template: '{{ .Version }}-next-{{ .ShortCommit }}'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - '^ci:'
+
+release:
+  github:
+    owner: net-merge
+    name: netmerge-gui
+  draft: false
+  prerelease: auto
+
+signs:
+  - artifacts: checksums
+    args:
+      - --batch
+      - --yes
+      - --armor
+      - --detach-sign
+      - --output
+      - ${signature}
+      - ${artifact}
+
+  - artifacts: archives
+    args:
+      - --batch
+      - --yes
+      - --armor
+      - --detach-sign
+      - --output
+      - ${signature}
+      - ${artifact}

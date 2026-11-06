@@ -1,0 +1,47 @@
+{
+  "name": "netmerge-gui",
+  "outputfilename": "netmerge-gui",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "NetMerge GUI Team",
+    "email": "team@netmerge.org"
+  },
+  "info": {
+    "companyName": "NetMerge",
+    "productName": "NetMerge GUI",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright © 2024 NetMerge Team. All rights reserved."
+  },
+  "windows": {
+    "webviewInstallMode": {
+      "mode": "download",
+      "silent": true
+    },
+    "webviewUserDataPath": "",
+    "windowIsTranslucent": false,
+    "disableWindowIcon": false,
+    "disableFramelessWindowDecorations": false,
+    "webviewBrowserPath": "",
+    "disablePinchZoom": true
+  },
+  "mac": {
+    "bundleIdentifier": "org.netmerge.gui",
+    "appCategory": "public.app-category.utilities",
+    "minimumSystemVersion": "11.0",
+    "disableUniversalBinary": false
+  },
+  "linux": {
+    "appCategory": "Network",
+    "desktopFileCategories": "Network;Utility;",
+    "programName": "netmerge-gui",
+    "iconPath": "build/linux/icon.png"
+  },
+  "updater": {
+    "enabled": true,
+    "githubOwner": "net-merge",
+    "githubRepository": "netmerge-gui"
+  }
+}
