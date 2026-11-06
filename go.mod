@@ -1,4 +1,4 @@
-module netmerge-gui
+module viki-fast
 
 go 1.22
 

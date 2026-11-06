@@ -1,19 +1,19 @@
 {
-  "name": "netmerge-gui",
-  "outputfilename": "netmerge-gui",
+  "name": "viki-fast",
+  "outputfilename": "viki-fast",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
-    "name": "NetMerge GUI Team",
-    "email": "team@netmerge.org"
+    "name": "Viki Fast Team",
+    "email": "team@viki-fast.org"
   },
   "info": {
-    "companyName": "NetMerge",
-    "productName": "NetMerge GUI",
+    "companyName": "Viki Fast",
+    "productName": "Viki Fast",
     "productVersion": "0.1.0",
-    "copyright": "Copyright © 2024 NetMerge Team. All rights reserved."
+    "copyright": "Copyright © 2024 Viki Fast Team. All rights reserved."
   },
   "windows": {
     "webviewInstallMode": {
@@ -28,7 +28,7 @@
     "disablePinchZoom": true
   },
   "mac": {
-    "bundleIdentifier": "org.netmerge.gui",
+    "bundleIdentifier": "org.vikifast.gui",
     "appCategory": "public.app-category.utilities",
     "minimumSystemVersion": "11.0",
     "disableUniversalBinary": false
@@ -36,12 +36,12 @@
   "linux": {
     "appCategory": "Network",
     "desktopFileCategories": "Network;Utility;",
-    "programName": "netmerge-gui",
+    "programName": "viki-fast",
     "iconPath": "build/linux/icon.png"
   },
   "updater": {
     "enabled": true,
-    "githubOwner": "net-merge",
-    "githubRepository": "netmerge-gui"
+    "githubOwner": "viki-fast",
+    "githubRepository": "viki-fast"
   }
 }

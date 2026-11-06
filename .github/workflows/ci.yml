@@ -104,12 +104,12 @@ jobs:
           GOOS=${{ matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'macos-latest' && 'darwin' || 'windows' }}
           GOARCH=${{ matrix.arch }}
           CGO_ENABLED=1
-          go build -o bin/netmerge-gui${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/netmerge-gui
+          go build -o bin/viki-fast${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/viki-fast
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: netmerge-gui-${{ matrix.os }}-${{ matrix.arch }}
+          name: viki-fast-${{ matrix.os }}-${{ matrix.arch }}
           path: bin/
           retention-days: 7
 

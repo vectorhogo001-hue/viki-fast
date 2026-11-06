@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to NetMerge GUI will be documented in this file.
+All notable changes to Viki Fast will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adapter management with weight, speed limit, IPv6 controls
 - History view with bandwidth, latency, and flow charts
 - Settings: General, Network, Scheduler, Appearance, Advanced
-- System tray integration (native per OS)
+- System tray integration (Windows, macOS, Linux)
 - Dark/Light/Auto theme support
 - Cross-platform builds (Windows, macOS, Linux)
 - CI/CD pipeline with GitHub Actions

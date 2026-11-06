@@ -16,7 +16,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"netmerge-gui/internal/core"
+	"viki-fast/internal/core"
 )
 
 //go:embed all:frontend/dist
@@ -26,7 +26,7 @@ func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:             "NetMerge GUI",
+		Title:             "Viki Fast",
 		Width:             1200,
 		Height:            800,
 		MinWidth:          900,
@@ -36,7 +36,7 @@ func main() {
 		Frameless:         false,
 		StartHidden:       false,
 		HideWindowOnClose: true,
-		BackgroundColour: &options.RGBA{R: 24, G: 24, B: 27, A: 255},
+		BackgroundColour: &options.RGBA{R: 15, G: 15, B: 20, A: 255},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -74,13 +74,13 @@ func main() {
 			TitleBarHideOnBlur:   false,
 			FullSizeContent:      false,
 			About: &mac.AboutInfo{
-				Title:   "NetMerge GUI",
+				Title:   "Viki Fast",
 				Version: "0.1.0",
 			},
 		},
 		Linux: &linux.Options{
 			Icon:                nil,
-			ProgramName:         "netmerge-gui",
+			ProgramName:         "viki-fast",
 			WebviewGpuPolicy:    linux.WebviewGpuPolicyAlways,
 			WindowIsTranslucent: false,
 			WebviewIsTransparent: false,
@@ -180,12 +180,12 @@ func (a *App) GetHistory(hours int) ([]map[string]interface{}, error) {
 	data := make([]map[string]interface{}, 24)
 	for i := 0; i < 24; i++ {
 		data[i] = map[string]interface{}{
-			"time":         100 + i*3600,
-			"download":     1024*1024*10 + i*1024*1024,
-			"upload":       1024*1024*2 + i*1024*512,
-			"wifi_latency":  12 + float64(i%5)*2,
-			"ethernet_latency": 3 + float64(i%3)*1,
-			"tether_latency": 25 + float64(i%4)*3,
+			"time":              100 + i*3600,
+			"download":          1024*1024*10 + i*1024*1024,
+			"upload":            1024*1024*2 + i*1024*512,
+			"wifi_latency":      12 + float64(i%5)*2,
+			"ethernet_latency":  3 + float64(i%3)*1,
+			"tether_latency":    25 + float64(i%4)*3,
 		}
 	}
 	return data, nil
@@ -274,8 +274,8 @@ func setupTray(ctx context.Context) {
 	helpMenu.AddText("About", keys.CmdOrCtrl("a"), func(_ *menu.CallbackData) {
 		runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
-			Title:   "About NetMerge GUI",
-			Message: "NetMerge GUI v0.1.0\nUse all your internet connections at once.\n\nhttps://github.com/net-merge/netmerge-gui",
+			Title:   "About Viki Fast",
+			Message: "Viki Fast v0.1.0\nUse all your internet connections at once.\n\nhttps://github.com/viki-fast/viki-fast",
 		})
 	})
 

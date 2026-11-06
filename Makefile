@@ -2,7 +2,7 @@
 
 # Default target
 help:
-	@echo "NetMerge GUI - Build Commands"
+	@echo "Viki Fast - Build Commands"
 	@echo ""
 	@echo "  make install-deps    - Install all dependencies (Go + Node)"
 	@echo "  make build-frontend  - Build frontend only"
@@ -28,7 +28,7 @@ build-frontend:
 # Build Go backend
 build-backend:
 	@echo "Building Go backend..."
-	go build -o bin/netmerge-gui ./cmd/netmerge-gui
+	go build -o bin/viki-fast ./cmd/viki-fast
 
 # Build everything
 build: build-frontend build-backend

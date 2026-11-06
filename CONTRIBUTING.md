@@ -1,6 +1,6 @@
-# Contributing to NetMerge GUI
+# Contributing to Viki Fast
 
-Thank you for your interest in contributing to NetMerge GUI! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Viki Fast! This document provides guidelines for contributing to the project.
 
 ## Code of Conduct
 
@@ -11,11 +11,11 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 ### Reporting Bugs
 
 Before submitting a bug report:
-1. Check if the issue already exists in [GitHub Issues](https://github.com/net-merge/netmerge-gui/issues)
+1. Check if the issue already exists in [GitHub Issues](https://github.com/viki-fast/viki-fast/issues)
 2. Use the bug report template
 3. Include:
    - OS and version
-   - NetMerge GUI version
+   - Viki Fast version
    - Steps to reproduce
    - Expected vs actual behavior
    - Screenshots/logs if applicable
@@ -56,8 +56,8 @@ Before submitting a bug report:
 ### Setup
 ```bash
 # Fork and clone
-git clone https://github.com/YOUR_USERNAME/netmerge-gui
-cd netmerge-gui
+git clone https://github.com/YOUR_USERNAME/viki-fast
+cd viki-fast
 
 # Install dependencies
 make install-deps
@@ -68,22 +68,22 @@ make dev
 
 ### Project Structure
 ```
-netmerge-gui/
-├── cmd/netmerge-gui/          # Wails entry point
-├── frontend/                  # React + TypeScript + Vite
+viki-fast/
+├── cmd/viki-fast/          # Wails entry point
+├── frontend/               # React + TypeScript + Vite
 │   ├── src/
-│   │   ├── components/        # Dashboard, Adapters, History, Settings
-│   │   ├── hooks/             # useStats, useAdapters, useTheme
-│   │   ├── utils/             # cn, formatBytes, etc.
+│   │   ├── components/     # Dashboard, Adapters, History, Settings
+│   │   ├── hooks/          # useStats, useAdapters, useTheme
+│   │   ├── utils/          # cn, formatBytes, etc.
 │   │   └── types.ts
 │   └── wails.json
 ├── internal/
-│   ├── app/                   # Wails bindings
-│   ├── core/                  # net-merge core logic
-│   ├── tray/                  # System tray (native per OS)
-│   ├── store/                 # BadgerDB persistence
-│   └── updater/               # Self-update
-├── build/                     # Packaging scripts
+│   ├── app/                # Wails bindings
+│   ├── core/               # net-merge core logic
+│   ├── tray/               # System tray (native per OS)
+│   ├── store/              # BadgerDB persistence
+│   └── updater/            # Self-update
+├── build/                  # Packaging scripts
 └── wails.json
 ```
 
@@ -178,9 +178,9 @@ npm run test:coverage
 
 ## Getting Help
 
-- **Discord**: [NetMerge Discord](https://discord.gg/netmerge) (TODO)
-- **GitHub Discussions**: [GitHub Discussions](https://github.com/net-merge/netmerge-gui/discussions)
-- **Email**: team@netmerge.org
+- **Discord**: [Viki Fast Discord](https://discord.gg/vikifast) (TODO)
+- **GitHub Discussions**: [GitHub Discussions](https://github.com/viki-fast/viki-fast/discussions)
+- **Email**: team@viki-fast.org
 
 ## License
 
