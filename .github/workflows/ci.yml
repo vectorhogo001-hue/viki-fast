@@ -27,6 +27,8 @@ jobs:
           cache: false
 
       - name: Install dependencies
+        env:
+          GOPROXY: https://proxy.golang.org,direct
         run: go mod tidy
 
       - name: Run tests
@@ -99,6 +101,8 @@ jobs:
           path: frontend/dist
 
       - name: Install dependencies
+        env:
+          GOPROXY: https://proxy.golang.org,direct
         run: go mod tidy
 
       - name: Build
