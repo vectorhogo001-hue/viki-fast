@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { LayoutDashboard, Wifi, History, Settings, ChevronRight, Wifi as WifiIcon, Ethernet, Usb, Activity, X } from 'lucide-react'
 import { cn } from '../utils/cn'
-import { SidebarProps } from './types'
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -12,14 +11,12 @@ const navItems = [
 
 type NavItemId = typeof navItems[number]['id']
 
-interface SidebarProps {
+export function Sidebar({ open, activeView, onViewChange, isConnected }: {
   open: boolean
   activeView: NavItemId
   onViewChange: (view: NavItemId) => void
   isConnected: boolean
-}
-
-export function Sidebar({ open, activeView, onViewChange, isConnected }: SidebarProps) {
+}) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

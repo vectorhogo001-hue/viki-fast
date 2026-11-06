@@ -1,8 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight, Menu, X, Wifi, Ethernet, Usb, Activity, Settings, Sun, Moon, Wifi as WifiIcon, Monitor, BarChart2, Cpu, Network, WifiOff } from 'lucide-react'
-import { HeaderProps } from './types'
+import { AppConfig } from '../../types'
 
-export function Header({ theme, onToggleTheme, isConnected, onToggleSidebar, sidebarOpen }: HeaderProps) {
+export function Header({ theme, onToggleTheme, isConnected, onToggleSidebar, sidebarOpen }: {
+  theme: 'light' | 'dark' | 'auto'
+  onToggleTheme: () => void
+  isConnected: boolean
+  onToggleSidebar: () => void
+  sidebarOpen: boolean
+}) {
   const [showThemeMenu, setShowThemeMenu] = useState(false)
   const themeMenuRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)

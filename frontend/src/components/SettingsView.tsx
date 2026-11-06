@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Save, Loader2, Palette, Zap, Globe, Cpu, HardDrive, Shield, Key, Bell, Moon, Sun, Monitor } from 'lucide-react'
+import { Save, Loader2, Palette, Zap, Globe, Cpu, HardDrive, Shield, Key, Bell, Moon, Sun, Monitor, AlertCircle } from 'lucide-react'
 import { cn } from '../../utils/cn'
 
 interface SettingsViewProps {

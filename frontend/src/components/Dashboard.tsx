@@ -3,18 +3,12 @@ import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
-import { TrendingUp, TrendingDown, Minus, Wifi, Ethernet, Usb, ExternalLink, Loader2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Wifi, Ethernet, Usb, ExternalLink, Loader2, Activity } from 'lucide-react'
 import { cn, formatBytes, formatSpeed } from '../../utils/cn'
 import { StatsSnapshot, AdapterStats } from '../../types'
 import { Speedometer } from './Speedometer'
 import { FlowDistribution } from './FlowDistribution'
 import { AdapterCard } from './AdapterCard'
-
-interface DashboardProps {
-  stats: StatsSnapshot | null
-  adapters: any[]
-  isConnected: boolean
-}
 
 interface DashboardProps {
   stats: StatsSnapshot | null
@@ -159,29 +153,6 @@ function StatCard({ label, value, icon, trend, trendUp }: {
   )
 }
 
-function StatCard({ label, value, icon, trend, trendUp }: {
-  label: string
-  value: string
-  icon: React.ReactNode
-  trend: string
-  trendUp: boolean
-}) {
-  return (
-    <div className="card p-4 space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-zinc-400 text-sm font-medium">{label}</span>
-        <span className="p-2 rounded-lg bg-primary-500/10">{icon}</span>
-      </div>
-      <div className="space-y-1">
-        <p className="text-2xl font-bold text-white tabular-nums">{value}</p>
-        <span className={`text-xs font-medium ${trendUp ? 'text-green-400' : 'text-red-400'}`}>
-          {trendUp ? '↑' : '↓'} {trend} vs last hour
-        </span>
-      </div>
-    </div>
-  )
-}
-
 function Speedometer({ download, upload }: { download: number; upload: number }) {
   return (
     <div className="card p-6 space-y-4">
@@ -256,12 +227,12 @@ function FlowDistribution({ data }: { data: Array<{ name: string; value: number;
 
 function LatencyChart() {
   // Mock latency data
-  const data = useMemo(() => Array.from({ length: 20 }, (_, i) => ({
+  const data = Array.from({ length: 20 }, (_, i) => ({
     time: `${(i * 3) % 60}m`,
     wifi: 12 + Math.random() * 8,
     ethernet: 3 + Math.random() * 4,
     tether: 25 + Math.random() * 15,
-  }), [])
+  }))
 
   return (
     <div className="card p-6 space-y-4">
@@ -307,11 +278,11 @@ function LatencyChart() {
 
 function BandwidthHistoryChart() {
   // Mock history data
-  const data = useMemo(() => Array.from({ length: 24 }, (_, i) => ({
+  const data = Array.from({ length: 24 }, (_, i) => ({
     hour: `${i}:00`,
     download: Math.floor(Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 10,
     upload: Math.floor(Math.random() * 1024 * 1024 * 10) + 1024 * 1024 * 2,
-  }), [])
+  }))
 
   return (
     <div className="card p-6 space-y-4">

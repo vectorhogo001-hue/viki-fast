@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Wifi, Ethernet, Usb, Loader2, Minus, Plus, CheckCircle2, AlertCircle, ExternalLink } from 'lucide-react'
+import { Wifi, Ethernet, Usb, Loader2, Minus, Plus, CheckCircle2, AlertCircle, ExternalLink, ChevronDown } from 'lucide-react'
 import { cn, formatBytes, formatSpeed } from '../../utils/cn'
 import { AdapterStats } from '../../types'
 

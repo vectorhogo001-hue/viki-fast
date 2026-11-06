@@ -179,7 +179,7 @@ function AdapterRow({
           </div>
         </div>
       </div>
-    </details>
+    </div>
   )
 }
 
