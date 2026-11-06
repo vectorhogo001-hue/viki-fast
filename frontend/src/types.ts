@@ -35,10 +35,16 @@ export interface StatsSnapshot {
 }
 
 export interface HistoryPoint {
+  time: string
   timestamp: string
-  total_rx: number
-  total_tx: number
-  latency: number
+  download: number
+  upload: number
+  wifi_latency: number
+  ethernet_latency: number
+  tether_latency: number
+  wifi_flows: number
+  ethernet_flows: number
+  tether_flows: number
 }
 
 export interface AppConfig {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Save, Loader2, Palette, Zap, Globe, Cpu, HardDrive, Shield, Key, Bell, Moon, Sun, Monitor, AlertCircle } from 'lucide-react'
-import { cn } from '../../utils/cn'
+import { Save, Loader2, Palette, Zap, Globe, Cpu, HardDrive, Shield, Key, Bell, Monitor, AlertCircle } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 interface SettingsViewProps {
   config: any
@@ -12,18 +12,17 @@ export function SettingsView({ config, onConfigChange }: SettingsViewProps) {
   const [activeTab, setActiveTab] = useState<'general' | 'network' | 'scheduler' | 'appearance' | 'advanced'>('general')
 
   const tabs = [
-    { id: 'general', label: 'General', icon: Settings },
+    { id: 'general', label: 'General', icon: Save },
     { id: 'network', label: 'Network', icon: Globe },
     { id: 'scheduler', label: 'Scheduler', icon: Cpu },
     { id: 'appearance', label: 'Appearance', icon: Palette },
-    { id: 'advanced', label: 'Advanced', icon: Settings },
+    { id: 'advanced', label: 'Advanced', icon: Shield },
   ] as const
 
   const handleSave = async () => {
     setSaving(true)
     await new Promise(resolve => setTimeout(resolve, 500))
     setSaving(false)
-    // In a real app, this would save to backend
     console.log('Settings saved:', config)
   }
 
@@ -83,32 +82,12 @@ export function SettingsView({ config, onConfigChange }: SettingsViewProps) {
   )
 }
 
-function SummaryCard({ label, value, icon, subtitle }: {
-  label: string
-  value: string
-  icon: React.ReactNode
-  subtitle?: string
-}) {
-  return (
-    <div className="card p-4 space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-zinc-400 text-sm font-medium">{label}</span>
-        <span className="p-2 rounded-lg bg-purple-500/10">{icon}</span>
-      </div>
-      <div className="space-y-1">
-        <p className="text-2xl font-bold text-white tabular-nums">{value}</p>
-        {subtitle && <p className="text-xs text-zinc-400">{subtitle}</p>}
-      </div>
-    </div>
-  )
-}
-
 function GeneralSettings({ config, onChange }: { config: any; onChange: (key: string, value: unknown) => void }) {
   return (
     <div className="space-y-6">
       <section className="card p-6 space-y-6">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <Settings className="w-5 h-5" />
+          <Save className="w-5 h-5" />
           General
         </h3>
 
@@ -233,7 +212,7 @@ function NetworkSettings({ config, onChange }: { config: any; onChange: (key: st
               type="input"
               value="1080"
               placeholder="1080"
-              type="number"
+              inputType="number"
               onChange={v => console.log('proxy_port', v)}
             />
           </div>
@@ -253,10 +232,10 @@ function NetworkSettings({ config, onChange }: { config: any; onChange: (key: st
             type="select"
             value={config.mtu}
             options={[
-              { value: 1500, label: '1500 (Standard)' },
-              { value: 9000, label: '9000 (Jumbo Frames - Recommended)' },
+              { value: '1500', label: '1500 (Standard)' },
+              { value: '9000', label: '9000 (Jumbo Frames - Recommended)' },
             ]}
-            onChange={v => onChange('mtu', v)}
+            onChange={v => onChange('mtu', parseInt(v))}
           />
         </div>
       </section>
@@ -292,7 +271,7 @@ function SchedulerSettings({ config, onChange }: { config: any; onChange: (key: 
               description="Time before idle TCP flow is considered closed"
               type="input"
               value="2"
-              type="number"
+              inputType="number"
               min="1"
               max="60"
               onChange={v => console.log('flow_timeout', v)}
@@ -302,7 +281,7 @@ function SchedulerSettings({ config, onChange }: { config: any; onChange: (key: 
               description="How often to probe adapters for internet connectivity"
               type="input"
               value="1"
-              type="number"
+              inputType="number"
               min="1"
               max="10"
               onChange={v => console.log('health_interval', v)}
@@ -493,7 +472,7 @@ function AppearanceSettings({ config, onChange }: { config: any; onChange: (key:
   )
 }
 
-function AdvancedSettings({ config, onChange }: { config: any; onChange: (key: string, value: unknown) => void }) {
+function AdvancedSettings({ config: _config, onChange: _onChange }: { config: any; onChange: (key: string, value: unknown) => void }) {
   return (
     <div className="space-y-6">
       <section className="card p-6 space-y-6 border-zinc-700/50">
@@ -557,20 +536,37 @@ function AdvancedSettings({ config, onChange }: { config: any; onChange: (key: s
   )
 }
 
-function SettingItem({ label, description, type, value, checked, options, onChange, ...props }: {
+interface SettingItemProps {
   label: string
   description?: string
   type: 'toggle' | 'select' | 'input'
-  value?: any
+  value?: string | number
   checked?: boolean
   options?: Array<{ value: string; label: string }>
   onChange?: (value: any) => void
-  [key: string]: any
-}) {
+  inputType?: string
+  min?: string
+  max?: string
+  placeholder?: string
+}
+
+function SettingItem({
+  label,
+  description,
+  type,
+  value,
+  checked,
+  options,
+  onChange,
+  inputType,
+  min,
+  max,
+  placeholder,
+}: SettingItemProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (onChange) {
       if (type === 'toggle') {
-        onChange(e.target.checked)
+        onChange((e.target as HTMLInputElement).checked)
       } else {
         onChange(e.target.value)
       }
@@ -588,7 +584,6 @@ function SettingItem({ label, description, type, value, checked, options, onChan
             checked={checked}
             onChange={handleChange}
             className="sr-only peer"
-            {...props}
           />
           <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
         </label>
@@ -598,7 +593,6 @@ function SettingItem({ label, description, type, value, checked, options, onChan
           value={value}
           onChange={handleChange}
           className="input max-w-xs"
-          {...props}
         >
           {options?.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -607,12 +601,13 @@ function SettingItem({ label, description, type, value, checked, options, onChan
       )}
       {type === 'input' && (
         <input
-          type={props.type || 'text'}
+          type={inputType || 'text'}
           value={value}
           onChange={handleChange}
           className="input max-w-xs"
-          placeholder={props.placeholder}
-          {...props}
+          placeholder={placeholder}
+          min={min}
+          max={max}
         />
       )}
     </div>

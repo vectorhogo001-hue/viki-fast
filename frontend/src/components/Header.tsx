@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { ChevronLeft, ChevronRight, Menu, X, Wifi, Ethernet, Usb, Activity, Settings, Sun, Moon, Wifi as WifiIcon, Monitor, BarChart2, Cpu, Network, WifiOff } from 'lucide-react'
-import { AppConfig } from '../../types'
+import { ChevronLeft, Menu, Sun, Moon, Wifi as WifiIcon, Monitor } from 'lucide-react'
 
-export function Header({ theme, onToggleTheme, isConnected, onToggleSidebar, sidebarOpen }: {
+export function Header({ theme, onToggleTheme: _onToggleTheme, isConnected, onToggleSidebar, sidebarOpen }: {
   theme: 'light' | 'dark' | 'auto'
   onToggleTheme: () => void
   isConnected: boolean
@@ -24,11 +23,19 @@ export function Header({ theme, onToggleTheme, isConnected, onToggleSidebar, sid
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const handleToggleSidebar = () => {
+    onToggleSidebar()
+  }
+
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'auto') => {
+    document.dispatchEvent(new CustomEvent('theme-change', { detail: newTheme }))
+  }
+
   return (
     <header className="h-14 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800 flex items-center justify-between px-4">
       <div className="flex items-center gap-4">
         <button
-          onClick={() => document.dispatchEvent(new CustomEvent('toggle-sidebar'))}
+          onClick={handleToggleSidebar}
           className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
           aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
@@ -72,21 +79,21 @@ export function Header({ theme, onToggleTheme, isConnected, onToggleSidebar, sid
               className="absolute right-0 top-full mt-1 w-40 bg-zinc-900 border border-zinc-700 rounded-lg shadow-lg py-1 z-50 animate-in"
             >
               <button
-                onClick={() => document.dispatchEvent(new CustomEvent('theme-change', { detail: 'light' }))}
+                onClick={() => handleThemeChange('light')}
                 className="w-full px-4 py-2 text-left text-sm hover:bg-zinc-800 flex items-center gap-2"
               >
                 <Sun className="w-4 h-4" />
                 <span>Light</span>
               </button>
               <button
-                onClick={() => document.dispatchEvent(new CustomEvent('theme-change', { detail: 'dark' }))}
+                onClick={() => handleThemeChange('dark')}
                 className="w-full px-4 py-2 text-left text-sm hover:bg-zinc-800 flex items-center gap-2"
               >
                 <Moon className="w-4 h-4" />
                 <span>Dark</span>
               </button>
               <button
-                onClick={() => document.dispatchEvent(new CustomEvent('theme-change', { detail: 'auto' }))}
+                onClick={() => handleThemeChange('auto')}
                 className="w-full px-4 py-2 text-left text-sm hover:bg-zinc-800 flex items-center gap-2"
               >
                 <Monitor className="w-4 h-4" />

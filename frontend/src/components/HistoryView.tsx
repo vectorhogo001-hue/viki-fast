@@ -3,13 +3,9 @@ import {
   LineChart, Line, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
-import { Calendar, TrendingUp, Download, Upload, Clock, RefreshCw } from 'lucide-react'
-import { cn, formatBytes, formatSpeed } from '../../utils/cn'
-import { HistoryPoint } from '../../types'
-
-interface HistoryViewProps {
-  // history data would come from backend
-}
+import { Calendar, TrendingUp, Download, Upload, Clock, Activity } from 'lucide-react'
+import { formatSpeed } from '@/utils/cn'
+import { HistoryPoint } from '@/types'
 
 export function HistoryView() {
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d' | '30d'>('24h')
@@ -39,7 +35,7 @@ export function HistoryView() {
           wifi: d.wifi_flows,
           ethernet: d.ethernet_flows,
           tether: d.tether_flows,
-        })
+        }))
     }
   }, [historyData, metric])
 
@@ -55,6 +51,80 @@ export function HistoryView() {
       avgLatency: latencies.reduce((a, b) => a + b, 0) / latencies.length,
     }
   }, [historyData])
+
+  const renderChart = () => {
+    if (metric === 'bandwidth') {
+      return (
+        <AreaChart data={currentData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="colorDownload" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorUpload" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
+          <XAxis dataKey="time" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
+          <YAxis stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={60}
+            tickFormatter={v => formatSpeed(v) + '/s'} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#27272a',
+              border: '1px solid #3f3f46',
+              borderRadius: '8px',
+            }}
+            formatter={(value: number) => [formatSpeed(value) + '/s', '']}
+          />
+          <Legend />
+          <Area type="monotone" dataKey="download" stroke="#22c55e" fill="url(#colorDownload)" strokeWidth={2} />
+          <Area type="monotone" dataKey="upload" stroke="#3b82f6" fill="url(#colorUpload)" strokeWidth={2} />
+        </AreaChart>
+      )
+    }
+    if (metric === 'latency') {
+      return (
+        <LineChart data={currentData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
+          <XAxis dataKey="time" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
+          <YAxis stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={50}
+            tickFormatter={v => v + ' ms'} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#27272a',
+              border: '1px solid #3f3f46',
+              borderRadius: '8px',
+            }}
+            formatter={(value: number) => [`${value.toFixed(1)} ms`, '']}
+          />
+          <Legend />
+          <Line type="monotone" dataKey="wifi" stroke="#3b82f6" strokeWidth={2} dot={false} name="Wi-Fi" />
+          <Line type="monotone" dataKey="ethernet" stroke="#22c55e" strokeWidth={2} dot={false} name="Ethernet" />
+          <Line type="monotone" dataKey="tether" stroke="#f59e0b" strokeWidth={2} dot={false} name="Tether" />
+        </LineChart>
+      )
+    }
+    return (
+      <BarChart data={currentData} layout="vertical" margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
+        <XAxis type="number" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
+        <YAxis dataKey="time" type="category" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={40} />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: '#27272a',
+            border: '1px solid #3f3f46',
+            borderRadius: '8px',
+          }}
+        />
+        <Legend />
+        <Bar dataKey="wifi" fill="#3b82f6" radius={[0, 4, 4, 0]} name="Wi-Fi" />
+        <Bar dataKey="ethernet" fill="#22c55e" radius={[0, 4, 4, 0]} name="Ethernet" />
+        <Bar dataKey="tether" fill="#f59e0b" radius={[0, 4, 4, 0]} name="Tether" />
+      </BarChart>
+    )
+  }
 
   return (
     <div className="flex-1 overflow-hidden p-4 md:p-6 space-y-6">
@@ -94,7 +164,7 @@ export function HistoryView() {
               >
                 {m.charAt(0).toUpperCase() + m.slice(1)}
               </button>
-            )}
+            ))}
           </div>
         </div>
       </div>
@@ -103,13 +173,13 @@ export function HistoryView() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <SummaryCard
           label="Avg Download"
-          value={formatSpeed(stats.avgDownload)}/s
+          value={`${formatSpeed(stats.avgDownload)}/s`}
           icon={<Download className="w-5 h-5 text-green-400" />}
           subtitle={`Peak: ${formatSpeed(stats.peakDownload)}/s`}
         />
         <SummaryCard
           label="Avg Upload"
-          value={formatSpeed(stats.avgUpload)}/s
+          value={`${formatSpeed(stats.avgUpload)}/s`}
           icon={<Upload className="w-5 h-5 text-blue-400" />}
           subtitle={`Peak: ${formatSpeed(stats.peakUpload)}/s`}
         />
@@ -136,73 +206,7 @@ export function HistoryView() {
         </div>
         <div className="h-80 lg:h-96">
           <ResponsiveContainer width="100%" height="100%">
-            {metric === 'bandwidth' && (
-              <AreaChart data={currentData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorDownload" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorUpload" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                <XAxis dataKey="time" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={60} 
-                  tickFormatter={v => formatSpeed(v) + '/s'} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#27272a',
-                    border: '1px solid #3f3f46',
-                    borderRadius: '8px',
-                  }}
-                  formatter={(value: number) => [formatSpeed(value) + '/s', '']}
-                />
-                <Legend />
-                <Area type="monotone" dataKey="download" stroke="#22c55e" fill="url(#colorDownload)" strokeWidth={2} />
-                <Area type="monotone" dataKey="upload" stroke="#3b82f6" fill="url(#colorUpload)" strokeWidth={2} />
-              </AreaChart>
-            )}
-            {metric === 'latency' && (
-              <LineChart data={currentData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                <XAxis dataKey="time" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={50}
-                  tickFormatter={v => v + ' ms'} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#27272a',
-                    border: '1px solid #3f3f46',
-                    borderRadius: '8px',
-                  }}
-                  formatter={(value: number) => [`${value.toFixed(1)} ms`, '']}
-                />
-                <Legend />
-                <Line type="monotone" dataKey="wifi" stroke="#3b82f6" strokeWidth={2} dot={false} name="Wi-Fi" />
-                <Line type="monotone" dataKey="ethernet" stroke="#22c55e" strokeWidth={2} dot={false} name="Ethernet" />
-                <Line type="monotone" dataKey="tether" stroke="#f59e0b" strokeWidth={2} dot={false} name="Tether" />
-              </LineChart>
-            )}
-            {metric === 'flows' && (
-              <BarChart data={currentData} layout="vertical" margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                <XAxis type="number" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis dataKey="time" type="category" stroke="#71717a" fontSize={11} tickLine={false} axisLine={false} width={40} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#27272a',
-                    border: '1px solid #3f3f46',
-                    borderRadius: '8px',
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="wifi" fill="#3b82f6" radius={[0, 4, 4, 0]} name="Wi-Fi" />
-                <Bar dataKey="ethernet" fill="#22c55e" radius={[0, 4, 4, 0]} name="Ethernet" />
-                <Bar dataKey="tether" fill="#f59e0b" radius={[0, 4, 4, 0]} name="Tether" />
-              </BarChart>
-            )}
+            {renderChart()}
           </ResponsiveContainer>
         </div>
       </div>
@@ -284,7 +288,7 @@ function generateMockHistory(range: string): HistoryPoint[] {
       ethernet_flows: Math.floor(20 + Math.random() * 15),
       tether_flows: Math.floor(10 + Math.random() * 10),
     }
-  }
+  })
 }
 
 export default HistoryView

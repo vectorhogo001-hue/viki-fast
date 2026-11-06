@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { LayoutDashboard, Wifi, History, Settings, ChevronRight, Wifi as WifiIcon, Ethernet, Usb, Activity, X } from 'lucide-react'
+import { LayoutDashboard, Wifi, Settings, ChevronRight, Wifi as WifiIcon, Activity } from 'lucide-react'
 import { cn } from '../utils/cn'
 
 const navItems = [
@@ -11,11 +11,10 @@ const navItems = [
 
 type NavItemId = typeof navItems[number]['id']
 
-export function Sidebar({ open, activeView, onViewChange, isConnected }: {
+export function Sidebar({ open, activeView, onViewChange }: {
   open: boolean
   activeView: NavItemId
   onViewChange: (view: NavItemId) => void
-  isConnected: boolean
 }) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

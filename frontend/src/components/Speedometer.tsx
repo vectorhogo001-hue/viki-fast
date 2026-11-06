@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { formatSpeed } from '../../utils/cn'
+import { formatSpeed } from '@/utils/cn'
 
 interface SpeedometerProps {
   download: number

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import type { StatsSnapshot, AdapterStats } from '../types'
+import type { StatsSnapshot } from '../types'
 
 interface UseStatsReturn {
   stats: StatsSnapshot | null

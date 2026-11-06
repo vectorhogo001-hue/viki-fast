@@ -1,28 +1,20 @@
-import { useState } from 'react'
-import { Wifi, Ethernet, Usb, Loader2, Minus, Plus, CheckCircle2, AlertCircle, ExternalLink, ChevronDown } from 'lucide-react'
-import { cn, formatBytes, formatSpeed } from '../../utils/cn'
-import { AdapterStats } from '../../types'
+import { } from 'react'
+import { Wifi, Server, Usb, ChevronDown } from 'lucide-react'
+import { cn, formatBytes, formatSpeed } from '@/utils/cn'
+import { AdapterStats } from '@/types'
 
 interface AdapterCardProps {
   adapter: AdapterStats
 }
 
 export function AdapterCard({ adapter }: AdapterCardProps) {
-  const [expanded, setExpanded] = useState(false)
   const typeIcons = {
     wifi: Wifi,
-    ethernet: Ethernet,
+    ethernet: Server,
     tether: Usb,
     unknown: Wifi,
   }
   const TypeIcon = typeIcons[adapter.type] || Wifi
-
-  const getHealthColor = () => {
-    if (!adapter.healthy) return 'text-red-400'
-    if (adapter.speed_rx > 1024 * 1024 * 20) return 'text-green-400'
-    if (adapter.speed_rx > 1024 * 1024 * 5) return 'text-yellow-400'
-    return 'text-zinc-400'
-  }
 
   return (
     <div className="card p-4 space-y-4 transition-all duration-200 hover:border-zinc-700">
@@ -35,9 +27,7 @@ export function AdapterCard({ adapter }: AdapterCardProps) {
             adapter.type === 'tether' && 'bg-amber-500/20 text-amber-400',
             adapter.type === 'unknown' && 'bg-zinc-500/20 text-zinc-400'
           )}>
-            <adapter.type === 'wifi' && <Wifi className="w-5 h-5" />}
-            {adapter.type === 'ethernet' && <Ethernet className="w-5 h-5" />}
-            {adapter.type === 'tether' && <Usb className="w-5 h-5" />}
+            <TypeIcon className="w-5 h-5" />
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-white truncate">{adapter.name}</p>

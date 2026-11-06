@@ -8,10 +8,10 @@ import { Header } from './components/Header'
 import { useTheme } from './hooks/useTheme'
 import { useStats } from './hooks/useStats'
 import { useAdapters } from './hooks/useAdapters'
-import { AppConfig, StatsSnapshot } from './types'
+import { AppConfig } from './types'
 
 function App() {
-  const { theme, toggleTheme, resolvedTheme } = useTheme()
+  const { toggleTheme, resolvedTheme } = useTheme()
   const [activeView, setActiveView] = useState<'dashboard' | 'adapters' | 'history' | 'settings'>('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const { stats, isConnected } = useStats()
@@ -36,7 +36,7 @@ function App() {
     }
   }, [resolvedTheme])
 
-  const handleConfigChange = (key: keyof AppConfig, value: unknown) => {
+  const handleConfigChange = (key: string, value: unknown) => {
     setConfig(prev => ({ ...prev, [key]: value }))
     // In a real app, this would call the backend
     console.log(`Config updated: ${key} =`, value)
@@ -56,7 +56,6 @@ function App() {
           open={sidebarOpen}
           activeView={activeView}
           onViewChange={setActiveView}
-          isConnected={isConnected}
         />
         <main className="flex-1 overflow-hidden flex flex-col">
           {activeView === 'dashboard' && (

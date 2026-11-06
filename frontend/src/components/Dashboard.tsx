@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
-import { TrendingUp, TrendingDown, Minus, Wifi, Ethernet, Usb, ExternalLink, Loader2, Activity } from 'lucide-react'
-import { cn, formatBytes, formatSpeed } from '../../utils/cn'
-import { StatsSnapshot, AdapterStats } from '../../types'
+import { TrendingUp, Wifi, Loader2, Activity } from 'lucide-react'
+import { formatBytes } from '@/utils/cn'
+import { StatsSnapshot } from '@/types'
 import { Speedometer } from './Speedometer'
 import { FlowDistribution } from './FlowDistribution'
 import { AdapterCard } from './AdapterCard'
@@ -72,14 +72,14 @@ export function Dashboard({ stats, adapters, isConnected }: DashboardProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Download"
-          value={formatBytes(totalSpeed.rx)}/s
+          value={`${formatBytes(totalSpeed.rx)}/s`}
           icon={<TrendingUp className="w-5 h-5 text-green-400" />}
           trend="+12%"
           trendUp
         />
         <StatCard
           label="Total Upload"
-          value={formatBytes(totalSpeed.tx)}/s
+          value={`${formatBytes(totalSpeed.tx)}/s`}
           icon={<TrendingUp className="w-5 h-5 text-blue-400" />}
           trend="+8%"
           trendUp
@@ -89,6 +89,7 @@ export function Dashboard({ stats, adapters, isConnected }: DashboardProps) {
           value={totalFlows.toString()}
           icon={<Activity className="w-5 h-5 text-purple-400" />}
           trend={`${healthyAdapters}/${adapters.length} healthy`}
+          trendUp={true}
         />
         <StatCard
           label="Active Adapters"
@@ -153,78 +154,6 @@ function StatCard({ label, value, icon, trend, trendUp }: {
   )
 }
 
-function Speedometer({ download, upload }: { download: number; upload: number }) {
-  return (
-    <div className="card p-6 space-y-4">
-      <h3 className="text-lg font-semibold text-white">Speedometer</h3>
-      <div className="grid grid-cols-2 gap-6">
-        <div className="text-center space-y-2">
-          <p className="text-zinc-400 text-sm font-medium">Download</p>
-          <p className="text-4xl font-bold text-green-400 tabular-nums">
-            {formatSpeed(download)}
-          </p>
-          <p className="text-zinc-500 text-xs">↓ RX</p>
-        </div>
-        <div className="text-center space-y-2">
-          <p className="text-zinc-400 text-sm font-medium">Upload</p>
-          <p className="text-4xl font-bold text-blue-400 tabular-nums">
-            {formatSpeed(upload)}
-          </p>
-          <p className="text-zinc-500 text-xs">↑ TX</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function FlowDistribution({ data }: { data: Array<{ name: string; value: number; color: string }> }) {
-  const COLORS = data.map(d => d.color)
-  return (
-    <div className="card p-6 space-y-4">
-      <h3 className="text-lg font-semibold text-white">Flow Distribution</h3>
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={2}
-              dataKey="value"
-              nameKey="name"
-              label={({ name, value }) => `${name} ${value.toFixed(1)}%`}
-              labelLine={false}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value: number) => `${value.toFixed(1)}%`}
-              contentStyle={{
-                backgroundColor: '#27272a',
-                border: '1px solid #3f3f46',
-                borderRadius: '8px',
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="flex flex-wrap justify-center gap-2">
-        {data.map((entry, index) => (
-          <div key={index} className="flex items-center gap-1.5 text-xs">
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }} />
-            <span className="text-zinc-400">{entry.name}</span>
-            <span className="text-white font-medium">{entry.value.toFixed(1)}%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function LatencyChart() {
   // Mock latency data
   const data = Array.from({ length: 20 }, (_, i) => ({
@@ -242,16 +171,16 @@ function LatencyChart() {
           <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorWifi" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="colorEthernet" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="colorTether" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" vertical={false} />
