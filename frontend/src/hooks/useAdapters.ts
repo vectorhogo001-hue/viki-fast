@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { AdapterStats, AdapterConfig } from '../types'
 
 interface UseAdaptersReturn {
@@ -29,7 +29,7 @@ export function useAdapters(): UseAdaptersReturn {
   }, [])
 
   // Initialize with mock data
-  useCallback(() => {
+  useEffect(() => {
     setAdapters([
       {
         name: 'Wi-Fi',

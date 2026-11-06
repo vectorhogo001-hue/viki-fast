@@ -93,7 +93,7 @@ function generateMockStats(prev?: StatsSnapshot): StatsSnapshot {
     },
   ]
 
-  const adapters = adapters.map(ad => ({
+  const updatedAdapters = adapters.map(ad => ({
     ...ad,
     rx: ad.rx + Math.floor(ad.speed_rx * 0.5),
     tx: ad.tx + Math.floor(ad.speed_tx * 0.5),
@@ -101,10 +101,10 @@ function generateMockStats(prev?: StatsSnapshot): StatsSnapshot {
 
   return {
     timestamp: new Date().toISOString(),
-    total_rx: adapters.reduce((sum, a) => sum + a.rx, 0),
-    total_tx: adapters.reduce((sum, a) => sum + a.tx, 0),
-    adapters,
-    flow_counts: Object.fromEntries(adapters.map(a => [a.name, a.flows])),
+    total_rx: updatedAdapters.reduce((sum, a) => sum + a.rx, 0),
+    total_tx: updatedAdapters.reduce((sum, a) => sum + a.tx, 0),
+    adapters: updatedAdapters,
+    flow_counts: Object.fromEntries(updatedAdapters.map(a => [a.name, a.flows])),
     scheduler_mode: 'weighted',
     ipv6_policy: 'auto',
     mtu: 9000,
