@@ -26,20 +26,8 @@ jobs:
           cache: true
           go-version-file: go.mod
 
-      - name: Verify Go module proxy
-        run: |
-          echo "Verifying Go module proxy..."
-          go env GOPROXY
-          go env GOSUMDB
-          go env GOPRIVATE
-          # Test module proxy connectivity
-          go list -m github.com/wailsapp/wails/v2@v2.10.0
-
       - name: Install dependencies
-        run: |
-          echo "Running go mod tidy..."
-          go mod tidy
-          echo "go mod tidy completed successfully"
+        run: go mod tidy
 
       - name: Run tests
         run: go test -race -v ./...
